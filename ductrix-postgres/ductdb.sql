@@ -90,6 +90,7 @@ ALTER TABLE db1.pooltable OWNER TO ductdb;
 CREATE TABLE privatepool (
     username character varying NOT NULL,
     password character varying,
+    content character varying,
     targetserver character varying,
     clusternm character varying,
     poolid uuid NOT NULL,

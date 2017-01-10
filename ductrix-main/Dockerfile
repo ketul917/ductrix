@@ -30,7 +30,7 @@ RUN apk add --no-cache bash git nginx uwsgi uwsgi-python py-pip \
 RUN apk update 
 
 # Install psycopg2 and other packages 
-RUN apk add --virtual build-deps gcc python-dev musl-dev \ 
+RUN apk add --virtual build-deps gcc python-dev musl-dev libffi-dev libxml2 libxml2-dev libxslt-dev\ 
   && apk add postgresql-dev \
   && pip install psycopg2 \
   && pip install sqlalchemy \
@@ -40,6 +40,10 @@ RUN apk add --virtual build-deps gcc python-dev musl-dev \
   && pip install datetime \
   && pip install rq \
   && pip install redis \
+  && pip install ansible\
+  && pip install ansible-vault\
+  && pip install pyvmomi\
+  && pip install tools\
   && apk del build-deps
 
 
