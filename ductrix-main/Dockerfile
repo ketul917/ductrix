@@ -3,7 +3,7 @@ MAINTAINER Kevin Patel <kevin@ductrix.com>
 
 RUN apk update 
 
-RUN apk add --no-cache bash git openssh
+RUN apk add --no-cache bash git openssh supervisor
 
 # Make ssh dir
 RUN mkdir /root/.ssh/
@@ -17,9 +17,6 @@ RUN chmod 600 /root/.ssh/id_rsa
 # Add bitbuckets key
 RUN ssh-keyscan bitbucket.org >> /root/.ssh/known_hosts
 
-# Clone the conf files into the docker container
-RUN git clone git@bitbucket.org:ketul917/ductrix-src.git /var/ductrix/
-
 # basic flask environment
 RUN apk add --no-cache bash git nginx uwsgi uwsgi-python py-pip \
 
@@ -30,7 +27,7 @@ RUN apk add --no-cache bash git nginx uwsgi uwsgi-python py-pip \
 RUN apk update 
 
 # Install psycopg2 and other packages 
-RUN apk add --virtual build-deps gcc python-dev musl-dev libffi-dev libxml2 libxml2-dev libxslt-dev\ 
+RUN apk add --virtual build-deps gcc python-dev musl-dev libffi-dev libxml2 libxml2-dev libxslt-dev \ 
   && apk add postgresql-dev \
   && pip install psycopg2 \
   && pip install sqlalchemy \
@@ -51,10 +48,10 @@ RUN apk add --virtual build-deps gcc python-dev musl-dev libffi-dev libxml2 libx
 ENV APP_DIR /app
 
 # app dir
-RUN mkdir ${APP_DIR} \
-	&& chown -R nginx:nginx ${APP_DIR} \
-	&& chmod 777 /run/ -R \
-	&& chmod 777 /root/ -R
+#RUN mkdir ${APP_DIR} \
+#	&& chown -R nginx:nginx ${APP_DIR} \
+#	&& chmod 755 /run/ -R 
+#	&& chmod 755 /root/ -R
 VOLUME [${APP_DIR}]
 WORKDIR ${APP_DIR}
 
@@ -67,6 +64,10 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY app.ini /app.ini
 COPY entrypoint.sh /entrypoint.sh
 
+RUN ssh-keygen -f /root/.ssh/id_rsa -t rsa -N ''
+
+# Clone the conf files into the docker container
+RUN git clone git@bitbucket.org:ketul917/ductrix-src.git /var/ductrix/
 
 # exectute start up script
 ENTRYPOINT ["/entrypoint.sh"]
