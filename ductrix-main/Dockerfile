@@ -1,30 +1,31 @@
 FROM alpine
 MAINTAINER Kevin Patel <kevin@ductrix.com>
 
-RUN apk update 
 
-RUN apk add --no-cache bash git openssh supervisor
+# Directory for ansible
+RUN mkdir /etc/ansible/
+RUN echo '[servers]' > /etc/ansible/hosts
 
 # Make ssh dir
+
+# since root is empty anyways
+RUN chmod 777 /root/
 RUN mkdir /root/.ssh/
+RUN ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
+
 
 # Copy over private key, and set permissions
-ADD id_rsa /root/.ssh/id_rsa
-
-RUN chmod 600 /root/.ssh/id_rsa
+ADD repo_key /root/.ssh/repo_key
+ADD config /root/.ssh/config
+RUN chmod 600 /root/.ssh/repo_key
 
 # Create known_hosts RUN touch /root/.ssh/known_hosts 
 # Add bitbuckets key
 RUN ssh-keyscan bitbucket.org >> /root/.ssh/known_hosts
 
-# basic flask environment
-RUN apk add --no-cache bash git nginx uwsgi uwsgi-python py-pip \
-
-#RUN apk add --no-cache bash git py-pip \
-	&& pip install --upgrade pip \
-	&& pip install flask
-
 RUN apk update 
+
+RUN apk add --no-cache bash git openssh supervisor curl nginx uwsgi uwsgi-python py-pip
 
 # Install psycopg2 and other packages 
 RUN apk add --virtual build-deps gcc python-dev musl-dev libffi-dev libxml2 libxml2-dev libxslt-dev \ 
@@ -40,6 +41,7 @@ RUN apk add --virtual build-deps gcc python-dev musl-dev libffi-dev libxml2 libx
   && pip install ansible\
   && pip install ansible-vault\
   && pip install pyvmomi\
+  && pip install pysphere\
   && pip install tools\
   && apk del build-deps
 
@@ -68,6 +70,8 @@ RUN ssh-keygen -f /root/.ssh/id_rsa -t rsa -N ''
 
 # Clone the conf files into the docker container
 RUN git clone git@bitbucket.org:ketul917/ductrix-src.git /var/ductrix/
+RUN git clone https://ketul917@bitbucket.org/ketul917/ductrix-images.git /var/ductrix-images
+RUN cp /var/ductrix/src/ansible.cfg /etc/ansible/
 
 # exectute start up script
 ENTRYPOINT ["/entrypoint.sh"]
