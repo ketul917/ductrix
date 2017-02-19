@@ -1,10 +1,14 @@
 FROM alpine
 MAINTAINER Kevin Patel <kevin@ductrix.com>
 
-
-# Directory for ansible
 RUN mkdir /etc/ansible/
 RUN echo '[servers]' > /etc/ansible/hosts
+RUN apk update 
+RUN apk add --no-cache bash git openssh supervisor curl nginx uwsgi uwsgi-python py-pip
+RUN pip install --upgrade pip
+RUN pip install flask
+
+# Directory for ansible
 
 # Make ssh dir
 
@@ -16,16 +20,13 @@ RUN ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
 
 # Copy over private key, and set permissions
 ADD repo_key /root/.ssh/repo_key
-ADD config /root/.ssh/config
 RUN chmod 600 /root/.ssh/repo_key
+
 
 # Create known_hosts RUN touch /root/.ssh/known_hosts 
 # Add bitbuckets key
 RUN ssh-keyscan bitbucket.org >> /root/.ssh/known_hosts
 
-RUN apk update 
-
-RUN apk add --no-cache bash git openssh supervisor curl nginx uwsgi uwsgi-python py-pip
 
 # Install psycopg2 and other packages 
 RUN apk add --virtual build-deps gcc python-dev musl-dev libffi-dev libxml2 libxml2-dev libxslt-dev \ 
@@ -66,11 +67,9 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY app.ini /app.ini
 COPY entrypoint.sh /entrypoint.sh
 
-RUN ssh-keygen -f /root/.ssh/id_rsa -t rsa -N ''
-
 # Clone the conf files into the docker container
-RUN git clone git@bitbucket.org:ketul917/ductrix-src.git /var/ductrix/
-RUN git clone https://ketul917@bitbucket.org/ketul917/ductrix-images.git /var/ductrix-images
+RUN ssh-agent bash -c 'ssh-add /root/.ssh/repo_key; git clone git@bitbucket.org:ketul917/ductrix-src.git /var/ductrix/'
+RUN ssh-agent bash -c 'ssh-add /root/.ssh/repo_key; git clone git@bitbucket.org:ketul917/ductrix-images.git /var/ductrix-images'
 RUN cp /var/ductrix/src/ansible.cfg /etc/ansible/
 
 # exectute start up script

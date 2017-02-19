@@ -2,7 +2,6 @@
 -- PostgreSQL database dump
 --
 CREATE ROLE ductdb WITH LOGIN SUPERUSER password 'Randm109';
-CREATE ROLE grafana_user WITH LOGIN SUPERUSER password 'RanDm108';
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -15,11 +14,13 @@ SET client_min_messages = warning;
 --
 
 CREATE SCHEMA db1;
+
+CREATE ROLE grafana_user WITH LOGIN SUPERUSER password 'RanDm108';
 CREATE SCHEMA grafana_db;
+ALTER SCHEMA grafana_db OWNER TO grafana_user;
 
 
 ALTER SCHEMA db1 OWNER TO ductdb;
-ALTER SCHEMA grafana_db OWNER TO grafana_user;
 
 --
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 

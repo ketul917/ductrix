@@ -1,2 +1,0 @@
-HostName bitbucket.org
-    IdentityFile ~/.ssh/repo_key
