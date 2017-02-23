@@ -16,13 +16,13 @@ services:
   grafana:
     depends_on:
       - graphite
-    image: ductrix-grafana 
+    build: ductrix-grafana 
     ports:
      - "3000:3000"
     links:
      - graphite
   dbhost:  
-    image: ductrix-postgres
+    build: ductrix-postgres
     ports:
      - "5432:5432"
     volumes: 
@@ -34,7 +34,7 @@ services:
       - dbhost 
       - grafana
       - redis
-    image: ductrix-main
+    build: ductrix-main
     ports:
      - "443:443"
     links:
