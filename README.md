@@ -1,29 +1,30 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+* Ductrix is Inspired by DBA's and Sysadmin's with Goal of simplifying and automating database infrastructure management. Our vision is Database management should be simple, secure and automated.
 
-### What is this repository for? ###
+* At its core, Ductrix Provisions databases. In addition it monitors the database performance and maintains entire database life cycle.
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
-### How do I get set up? ###
+## Ductrix is comprised of several open source projects
+* Ansible = Orchestrate tasks 
+* Grafana = Display collectd information 
+* Collectd = Collect system stats 
+* Adminer = Modify databases and its configuration
+* Patternfly = Web UI  
+* Redis = Queqing of tasks 
+* Posgtres = Interal database
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+### Installation ###
 
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
+1. Make sure you have docker and docker-compose installed and running
+2. Download this github repo
+3. cd installer
+4. Run: docoker-compose up -d 
+5. Go to <ipaddress>:443
+6. Setup your connection in pools tab
+7. Creates servers in the servers tab
+8. Creates databases in the databases tab
 
 ### Who do I talk to? ###
 
-* Repo owner or admin
-* Other community or team contact
+* admin@ductrix.com
