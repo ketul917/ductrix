@@ -19,7 +19,7 @@
 1. Make sure you have docker and docker-compose installed and running
 2. Download this github repo
 3. cd installer
-4. Run: docoker-compose up -d 
+4. Run: docker-compose up -d 
 5. Go to <ipaddress>:443
 6. Setup your connection in pools tab
 7. Creates servers in the servers tab
