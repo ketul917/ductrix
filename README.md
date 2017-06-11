@@ -20,7 +20,7 @@
 2. Download this github repo
 3. cd installer
 4. Run: docker-compose up -d 
-5. Go to <ipaddress>:443
+5. Go to localhost:443
 6. Setup your connection in pools tab
 7. Creates servers in the servers tab
 8. Creates databases in the databases tab
