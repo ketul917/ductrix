@@ -7,7 +7,7 @@
     name:
     vcenter_host: 192.168.1.160 
     vcenter_login: vsphere.local\administrator
-    vcenter_password: Ram1sita!
+    vcenter_password: 
     folder: TestDB
     tmp_ip_file: /var/tmp/{{ name }}_tmp_ip.out
     image: RHEL72 #RHEL 7.2
